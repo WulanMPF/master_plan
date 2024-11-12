@@ -125,3 +125,89 @@ Lakukan Hot restart (bukan hot reload) pada aplikasi Flutter Anda. Anda akan mel
 - initState() -> Digunakan untuk inisialisasi yang memerlukan konteks dan pengaturan listener atau sumber daya yang diperlukan saat widget dibuat.
 
 - dispose() -> Digunakan untuk membersihkan sumber daya dan listener ketika widget tidak lagi digunakan, menjaga performa aplikasi dan mencegah kebocoran memori.
+
+## PRAKTIKUM 2
+
+### Langkah 1: Buat file plan_provider.dart
+Buat folder baru provider di dalam folder lib, lalu buat file baru dengan nama plan_provider.dart berisi kode seperti berikut.
+
+![Praktikum](/images/p2_langkah1.png)
+
+### Langkah 2: Edit main.dart
+Gantilah pada bagian atribut home dengan PlanProvider seperti berikut. Jangan lupa sesuaikan bagian impor jika dibutuhkan.
+
+![Praktikum](/images/p2_langkah2.png)
+
+### Langkah 3: Tambah method pada model plan.dart
+Tambahkan dua method di dalam model class Plan seperti kode berikut.
+
+![Praktikum](/images/p2_langkah3.png)
+
+### Langkah 4: Pindah ke PlanScreen
+Edit PlanScreen agar menggunakan data dari PlanProvider. Hapus deklarasi variabel plan (ini akan membuat error). Kita akan perbaiki pada langkah 5 berikut ini.
+
+![Praktikum](/images/p2_langkah4.png)
+
+### Langkah 5: Edit method _buildAddTaskButton
+Tambahkan BuildContext sebagai parameter dan gunakan PlanProvider sebagai sumber datanya. Edit bagian kode seperti berikut.
+
+![Praktikum](/images/p2_langkah5.png)
+
+### Langkah 6: Edit method _buildTaskTile
+Tambahkan parameter BuildContext, gunakan PlanProvider sebagai sumber data. Ganti TextField menjadi TextFormField untuk membuat inisial data provider menjadi lebih mudah.
+
+![Praktikum](/images/p2_langkah6.png)
+
+### Langkah 7: Edit _buildList
+Sesuaikan parameter pada bagian _buildTaskTile seperti kode berikut.
+
+![Praktikum](/images/p2_langkah7.png)
+
+### Langkah 8: Tetap di class PlanScreen
+Edit method build sehingga bisa tampil progress pada bagian bawah (footer). Caranya, bungkus (wrap) _buildList dengan widget Expanded dan masukkan ke dalam widget Column seperti kode pada Langkah 9.
+
+![Praktikum](/images/p2_langkah8.png)
+
+### Langkah 9: Tambah widget SafeArea
+Terakhir, tambahkan widget SafeArea dengan berisi completenessMessage pada akhir widget Column. Perhatikan kode berikut ini.
+
+![Praktikum](/images/p2_langkah9a.png)
+
+Akhirnya, run atau tekan F5 jika aplikasi belum running. Tidak akan terlihat perubahan pada UI, namun dengan melakukan langkah-langkah di atas, Anda telah menerapkan cara memisahkan dengan baik antara view dan model. Ini merupakan hal terpenting dalam mengelola state di aplikasi Anda.
+
+## TUGAS PRAKTIKUM 2
+
+### Jelaskan mana yang dimaksud InheritedWidget pada langkah 1 tersebut! Mengapa yang digunakan InheritedNotifier?
+
+**Jelaskan mana yang dimaksud InheritedWidget pada langkah 1 tersebut!**
+
+- Pada langkah 1, PlanProvider adalah sebuah kelas yang digunakan untuk berbagi data antar widget di dalam aplikasi Flutter. Kelas ini adalah turunan dari InheritedNotifier, yang mirip dengan InheritedWidget. Tujuan dari InheritedNotifier adalah agar data tertentu bisa diakses oleh widget lain tanpa harus dikirimkan terus-menerus dari satu widget ke widget lainnya.
+
+**Mengapa yang digunakan InheritedNotifier?**
+
+- InheritedNotifier adalah versi khusus dari InheritedWidget yang bisa digunakan ketika data di dalamnya mungkin berubah. Karena data Plan bisa berubah, InheritedNotifier cocok karena ketika data diubah, InheritedNotifier akan secara otomatis memberi tahu semua widget yang tergantung pada data ini untuk memperbarui tampilannya.
+- Dalam kode PlanProvider, ValueNotifier<Plan> adalah tempat penyimpanan data Plan. Dengan cara ini, jika data Plan berubah, semua widget yang menggunakan PlanProvider akan otomatis diperbarui sesuai perubahan data.
+
+### Jelaskan maksud dari method di langkah 3 pada praktikum tersebut! Mengapa dilakukan demikian?
+
+**Jelaskan maksud dari method di langkah 3 pada praktikum tersebut!**
+
+- completedCount -> Method ini menghitung jumlah tugas yang telah selesai (complete). tasks adalah daftar semua tugas dalam Plan. Method ini menggunakan where untuk memfilter hanya tugas yang status complete-nya bernilai true, kemudian menghitung jumlahnya dengan length. completedCount memberi informasi tentang berapa banyak tugas yang sudah selesai dalam plan tersebut.
+- completenessMessage -> Method ini membuat pesan yang menjelaskan status kemajuan plan secara keseluruhan. Pesan tersebut menunjukkan jumlah tugas yang sudah selesai (completedCount) dari total tugas (tasks.length). Sebagai contoh, jika ada 3 tugas selesai dari 5 tugas total, maka pesan ini akan berbunyi: "3 out of 5 tasks". Bertujuan untuk memberikan ringkasan yang mudah dibaca tentang kemajuan plan, yang dapat ditampilkan kepada pengguna dalam antarmuka aplikasi.
+
+**Mengapa dilakukan demikian?**
+
+- Kemudahan Akses: Dengan adanya completedCount, kita bisa langsung tahu jumlah tugas yang selesai tanpa harus menghitungnya berulang kali di berbagai bagian aplikasi. Sehingga membuat kode lebih rapi dan efisien.
+- Memberikan Informasi Kemajuan: completenessMessage memberikan pesan yang ringkas dan mudah dimengerti tentang kemajuan, yang bermanfaat untuk tampilan antarmuka, sehingga pengguna bisa langsung melihat status penyelesaian dari rencana tersebut.
+
+## Lakukan capture hasil dari Langkah 9 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+
+![Praktikum](/images/p2_langkah9b.gif)
+
+- **PlanProvider** adalah widget yang menyediakan data Plan dan menggunakan InheritedNotifier untuk memastikan widget-widget yang bergantung pada data ini otomatis diperbarui saat ada perubahan.
+- **PlanScreen** menampilkan daftar tugas yang ada dalam Plan dan menggunakan PlanProvider untuk mengakses data Plan di seluruh bagian layar.
+- Di bagian bawah layar, ada tampilan progres yang menunjukkan berapa banyak tugas yang sudah diselesaikan dalam bentuk pesan seperti "X out of Y tasks" menggunakan completenessMessage.
+- **_buildAddTaskButton** menyediakan tombol untuk menambahkan tugas baru ke daftar. Ketika ditekan, tombol ini akan membuat tugas baru dan memperbarui data Plan.
+- **_buildTaskTile** menampilkan masing-masing tugas dengan Checkbox untuk menandai apakah tugas selesai dan TextFormField untuk mengedit deskripsi tugas secara langsung.
+- **_buildList** menampilkan daftar tugas yang dibuat dalam bentuk ListView.builder.
+- Pada **langkah 9**, progres dari tugas ditampilkan di bagian bawah layar menggunakan SafeArea untuk memastikan teks completenessMessage tetap berada dalam area yang aman dari elemen-elemen seperti tombol navigasi atau tepi layar.
