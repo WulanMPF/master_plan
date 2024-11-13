@@ -200,7 +200,7 @@ Akhirnya, run atau tekan F5 jika aplikasi belum running. Tidak akan terlihat per
 - Kemudahan Akses: Dengan adanya completedCount, kita bisa langsung tahu jumlah tugas yang selesai tanpa harus menghitungnya berulang kali di berbagai bagian aplikasi. Sehingga membuat kode lebih rapi dan efisien.
 - Memberikan Informasi Kemajuan: completenessMessage memberikan pesan yang ringkas dan mudah dimengerti tentang kemajuan, yang bermanfaat untuk tampilan antarmuka, sehingga pengguna bisa langsung melihat status penyelesaian dari rencana tersebut.
 
-## Lakukan capture hasil dari Langkah 9 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+### Lakukan capture hasil dari Langkah 9 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
 
 ![Praktikum](/images/p2_langkah9b.gif)
 
@@ -211,3 +211,115 @@ Akhirnya, run atau tekan F5 jika aplikasi belum running. Tidak akan terlihat per
 - **_buildTaskTile** menampilkan masing-masing tugas dengan Checkbox untuk menandai apakah tugas selesai dan TextFormField untuk mengedit deskripsi tugas secara langsung.
 - **_buildList** menampilkan daftar tugas yang dibuat dalam bentuk ListView.builder.
 - Pada **langkah 9**, progres dari tugas ditampilkan di bagian bawah layar menggunakan SafeArea untuk memastikan teks completenessMessage tetap berada dalam area yang aman dari elemen-elemen seperti tombol navigasi atau tepi layar.
+
+## PRAKTIKUM 3
+
+### Langkah 1: Edit PlanProvider
+Perhatikan kode berikut, edit class PlanProvider sehingga dapat menangani List Plan.
+
+![Praktikum](/images/p3_langkah1.png)
+
+### Langkah 2: Edit main.dart
+Langkah sebelumnya dapat menyebabkan error pada main.dart dan plan_screen.dart. Pada method build, gantilah menjadi kode seperti ini.
+
+![Praktikum](/images/p3_langkah2.png)
+
+### Langkah 3: Edit plan_screen.dart
+Tambahkan variabel plan dan atribut pada constructor-nya seperti berikut.
+
+![Praktikum](/images/p3_langkah3.png)
+
+### Langkah 4: Error
+Itu akan terjadi error setiap kali memanggil PlanProvider.of(context). Itu terjadi karena screen saat ini hanya menerima tugas-tugas untuk satu kelompok Plan, tapi sekarang PlanProvider menjadi list dari objek plan tersebut.
+
+### Langkah 5: Tambah getter Plan
+Tambahkan getter pada _PlanScreenState seperti kode berikut.
+
+![Praktikum](/images/p3_langkah5.png)
+
+### Langkah 6: Method initState()
+Pada bagian ini kode tetap seperti berikut.
+
+![Praktikum](/images/p3_langkah6.png)
+
+### Langkah 7: Widget build
+Pastikan Anda telah merubah ke List dan mengubah nilai pada currentPlan seperti kode berikut ini.
+
+![Praktikum](/images/p3_langkah7.png)
+
+### Langkah 8: Edit _buildTaskTile
+Pastikan ubah ke List dan variabel planNotifier seperti kode berikut ini.
+
+![Praktikum](/images/p3_langkah8a.png)
+
+**Kode lengkap plan_screen.dart (ada beberapa yang dimodifikasi dikarenakan error)**
+
+![Praktikum](/images/p3_langkah8b.png)
+
+### Langkah 9: Buat screen baru
+Pada folder view, buatlah file baru dengan nama plan_creator_screen.dart dan deklarasikan dengan StatefulWidget bernama PlanCreatorScreen.
+
+![Praktikum](/images/p3_langkah9a.png)
+
+Gantilah di main.dart pada atribut home menjadi seperti berikut.
+
+![Praktikum](/images/p3_langkah9b.png)
+
+### Langkah 10: Pindah ke class _PlanCreatorScreenState
+Kita perlu tambahkan variabel TextEditingController sehingga bisa membuat TextField sederhana untuk menambah Plan baru. Jangan lupa tambahkan dispose ketika widget unmounted seperti kode berikut.
+
+![Praktikum](/images/p3_langkah10.png)
+
+### Langkah 11: Pindah ke method build
+Letakkan method Widget build berikut di atas void dispose. Gantilah ‘Namaku' dengan nama panggilan Anda.
+
+![Praktikum](/images/p3_langkah11.png)
+
+### Langkah 12: Buat widget _buildListCreator
+Buatlah widget berikut setelah widget build.
+
+![Praktikum](/images/p3_langkah12.png)
+
+### Langkah 13: Buat void addPlan()
+Tambahkan method berikut untuk menerima inputan dari user berupa text plan.
+
+![Praktikum](/images/p3_langkah13.png)
+
+### Langkah 14: Buat widget _buildMasterPlans()
+Tambahkan widget seperti kode berikut.
+
+![Praktikum](/images/p3_langkah14a.png)
+
+**Kode lengkap plan_creator_screen.dart (ada beberapa yang dimodifikasi dikarenakan error)**
+
+![Praktikum](/images/p3_langkah14b.png)
+
+## TUGAS PRAKTIKUM 3
+
+### Berdasarkan Praktikum 3 yang telah Anda lakukan, jelaskan maksud dari gambar diagram berikut ini!
+
+![Tugas](/images/p3_tugas1.png)
+
+Diagram tersebut menggambarkan arsitektur atau struktur aplikasi Master Plan yang sedang dikembangkan.
+
+- MaterialApp: Merupakan root widget dari aplikasi yang mengatur tema, navigasi, dan lainnya.
+- PlanProvider: Merupakan sebuah InheritedNotifier yang menyediakan daftar Plan ke seluruh aplikasi. Dengan menggunakan PlanProvider, widget-widget lain dapat mengakses dan memanipulasi daftar rencana tersebut.
+- PlanScreen: Merupakan halaman utama aplikasi yang menampilkan detail dari satu Plan tertentu. Halaman ini menggunakan PlanProvider untuk mendapatkan dan memanipulasi data rencana.
+- PlanCreatorScreen: Merupakan halaman baru yang ditambahkan untuk membuat rencana baru. Halaman ini juga menggunakan PlanProvider untuk menambahkan rencana baru ke daftar.
+- Navigator Push: Ketika pengguna mengklik salah satu rencana di PlanCreatorScreen, maka aplikasi akan menampilkan halaman PlanScreen untuk rencana yang dipilih.
+
+Secara keseluruhan, diagram ini menggambarkan bagaimana alur aplikasi bekerja, di mana PlanProvider berperan sebagai pusat penyedia data rencana yang dapat diakses oleh berbagai widget dalam aplikasi, termasuk halaman PlanScreen dan PlanCreatorScreen.
+
+### Lakukan capture hasil dari Langkah 14 berupa GIF, kemudian jelaskan apa yang telah Anda buat!
+
+![Tugas](/images/p3_tugas2.gif)
+
+Pada langkah 14 dilakukan pembuatan fitur untuk menambahkan plan baru pada aplikasi Master Plan.
+
+- Terdapat sebuah TextField di bagian atas layar yang memungkinkan pengguna untuk mengetikkan nama plan baru.
+- Ketika pengguna mengetikkan nama plan dan menekan tombol "Enter", maka plan baru akan ditambahkan ke dalam daftar plan yang ditampilkan di bawahnya.
+- Daftar plan ditampilkan menggunakan ListView, di mana setiap item dalam ListView menampilkan nama plan dan status kelengkapannya.
+- Jika daftar plan masih kosong, maka akan ditampilkan pesan dan ikon yang menunjukkan bahwa belum ada plan yang dibuat.
+- Ketika pengguna mengklik salah satu item plan di ListView, maka aplikasi akan berpindah ke halaman PlanScreen yang menampilkan detail dari plan yang dipilih.
+
+Dengan fitur ini, pengguna aplikasi Master Plan dapat dengan mudah menambahkan plan-plan baru dan melihat daftar plan yang telah dibuat. Hal ini memudahkan pengguna untuk mengelola dan mengetahui progress dari plan-plan yang sedang dikerjakan.
